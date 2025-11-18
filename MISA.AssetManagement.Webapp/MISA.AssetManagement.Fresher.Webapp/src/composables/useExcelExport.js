@@ -1,7 +1,7 @@
 /**
  * @fileoverview Composable export Excel cho danh sách tài sản cố định
  * @description Cung cấp các hàm hỗ trợ export danh sách và tổng hợp sang Excel
- * @createdBy TTVinh (17/11/2025)
+ * @createdBy TTVinh - 17/11/2025
  */
 
 // #region Import
@@ -13,7 +13,7 @@ import { exportToExcelWithHeaders } from '@/utils/excel/excelExporter.js'
 /**
  * Composable cung cấp logic export Excel
  * @returns {Object} exporting state và các hàm export
- * @createdBy TTVinh (17/11/2025)
+ * @createdBy TTVinh - 17/11/2025
  */
 export function useExcelExport() {
   // #region State
@@ -30,33 +30,33 @@ export function useExcelExport() {
    * @param {Array} assets - Danh sách tài sản cần export
    * @param {Object} options - Tuỳ chọn (fileName, sheetName)
    * @returns {Boolean} - Trả về true nếu export thành công
-   * @createdBy TTVinh (17/11/2025)
+   * @createdBy TTVinh - 17/11/2025
    */
   async function exportFixedAssets(assets, options = {}) {
     exporting.value = true
 
     try {
       const headers = [
-        { key: 'fixed_asset_code', label: 'Mã tài sản' },
-        { key: 'fixed_asset_name', label: 'Tên tài sản' },
-        { key: 'fixed_asset_category_name', label: 'Loại tài sản' },
-        { key: 'department_name', label: 'Bộ phận sử dụng' },
-        { key: 'quantity', label: 'Số lượng' },
-        { key: 'cost', label: 'Nguyên giá' },
-        { key: 'accumulated_depreciation', label: 'HM/KH lũy kế' },
-        { key: 'remaining_value', label: 'Giá trị còn lại' }
+        { key: 'FixedAssetCode', label: 'Mã tài sản' },
+        { key: 'FixedAssetName', label: 'Tên tài sản' },
+        { key: 'FixedAssetCategoryName', label: 'Loại tài sản' },
+        { key: 'DepartmentName', label: 'Bộ phận sử dụng' },
+        { key: 'Quantity', label: 'Số lượng' },
+        { key: 'Cost', label: 'Nguyên giá' },
+        { key: 'AccumulatedDepreciation', label: 'HM/KH lũy kế' },
+        { key: 'RemainingValue', label: 'Giá trị còn lại' }
       ]
 
       // Chuẩn hoá dữ liệu export
       const exportData = assets.map(asset => ({
-        fixed_asset_code: asset.AssetCode || asset.fixed_asset_code || '',
-        fixed_asset_name: asset.AssetName || asset.fixed_asset_name || '',
-        fixed_asset_category_name: asset.AssetTypeName || asset.fixed_asset_category_name || '',
-        department_name: asset.DepartmentName || asset.department_name || '',
-        quantity: asset.Quantity || asset.quantity || 0,
-        cost: asset.Cost || asset.cost || 0,
-        accumulated_depreciation: asset.AccumulatedDepreciation || asset.accumulated_depreciation || 0,
-        remaining_value: asset.RemainingValue || asset.remaining_value || 0
+        FixedAssetCode: asset.AssetCode || asset.FixedAssetCode || '',
+        FixedAssetName: asset.AssetName || asset.FixedAssetName || '',
+        FixedAssetCategoryName: asset.AssetTypeName || asset.FixedAssetCategoryName || '',
+        DepartmentName: asset.DepartmentName || asset.DepartmentName || '',
+        Quantity: asset.Quantity || asset.Quantity || 0,
+        Cost: asset.Cost || asset.Cost || 0,
+        AccumulatedDepreciation: asset.AccumulatedDepreciation || asset.AccumulatedDepreciation || 0,
+        RemainingValue: asset.RemainingValue || asset.RemainingValue || 0
       }))
 
       // Sinh tên file & sheet
@@ -81,45 +81,45 @@ export function useExcelExport() {
    * @param {Array} assets - Danh sách tài sản cần export
    * @param {Object} summary - Dữ liệu tổng hợp (số lượng, nguyên giá,...)
    * @returns {Boolean} - Trả về true nếu export thành công
-   * @createdBy TTVinh (17/11/2025)
+   * @createdBy TTVinh - 17/11/2025
    */
   async function exportWithSummary(assets, summary) {
     exporting.value = true
 
     try {
       const headers = [
-        { key: 'fixed_asset_code', label: 'Mã tài sản' },
-        { key: 'fixed_asset_name', label: 'Tên tài sản' },
-        { key: 'fixed_asset_category_name', label: 'Loại tài sản' },
-        { key: 'department_name', label: 'Bộ phận sử dụng' },
-        { key: 'quantity', label: 'Số lượng' },
-        { key: 'cost', label: 'Nguyên giá' },
-        { key: 'accumulated_depreciation', label: 'HM/KH lũy kế' },
-        { key: 'remaining_value', label: 'Giá trị còn lại' }
+        { key: 'FixedAssetCode', label: 'Mã tài sản' },
+        { key: 'FixedAssetName', label: 'Tên tài sản' },
+        { key: 'FixedAssetCategoryName', label: 'Loại tài sản' },
+        { key: 'DepartmentName', label: 'Bộ phận sử dụng' },
+        { key: 'Quantity', label: 'Số lượng' },
+        { key: 'Cost', label: 'Nguyên giá' },
+        { key: 'AccumulatedDepreciation', label: 'HM/KH lũy kế' },
+        { key: 'RemainingValue', label: 'Giá trị còn lại' }
       ]
 
       // Chuẩn hoá dữ liệu export
       const exportData = assets.map(asset => ({
-        fixed_asset_code: asset.AssetCode || asset.fixed_asset_code || '',
-        fixed_asset_name: asset.AssetName || asset.fixed_asset_name || '',
-        fixed_asset_category_name: asset.AssetTypeName || asset.fixed_asset_category_name || '',
-        department_name: asset.DepartmentName || asset.department_name || '',
-        quantity: asset.Quantity || asset.quantity || 0,
-        cost: asset.Cost || asset.cost || 0,
-        accumulated_depreciation: asset.AccumulatedDepreciation || asset.accumulated_depreciation || 0,
-        remaining_value: asset.RemainingValue || asset.remaining_value || 0
+        FixedAssetCode: asset.AssetCode || asset.FixedAssetCode || '',
+        FixedAssetName: asset.AssetName || asset.FixedAssetName || '',
+        FixedAssetCategoryName: asset.AssetTypeName || asset.FixedAssetCategoryName || '',
+        DepartmentName: asset.DepartmentName || asset.DepartmentName || '',
+        Quantity: asset.Quantity || asset.Quantity || 0,
+        Cost: asset.Cost || asset.Cost || 0,
+        AccumulatedDepreciation: asset.AccumulatedDepreciation || asset.AccumulatedDepreciation || 0,
+        RemainingValue: asset.RemainingValue || asset.RemainingValue || 0
       }))
 
       // Thêm dòng tổng hợp vào cuối
       exportData.push({
-        fixed_asset_code: '',
-        fixed_asset_name: '',
-        fixed_asset_category_name: '',
-        department_name: 'TỔNG CỘNG',
-        quantity: summary.totalQuantity || 0,
-        cost: summary.totalCost || 0,
-        accumulated_depreciation: summary.totalDepreciation || 0,
-        remaining_value: summary.totalResidual || 0
+        FixedAssetCode: '',
+        FixedAssetName: '',
+        FixedAssetCategoryName: '',
+        DepartmentName: 'TỔNG CỘNG',
+        Quantity: summary.totalQuantity || 0,
+        Cost: summary.totalCost || 0,
+        AccumulatedDepreciation: summary.totalDepreciation || 0,
+        RemainingValue: summary.totalResidual || 0
       })
 
       const timestamp = new Date().toISOString().slice(0, 10).replace(/-/g, '')

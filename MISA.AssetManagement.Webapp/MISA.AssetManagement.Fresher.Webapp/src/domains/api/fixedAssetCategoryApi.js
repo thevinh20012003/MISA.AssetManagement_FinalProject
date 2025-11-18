@@ -3,7 +3,8 @@
  * Service quản lý API cho "Loại tài sản" (FixedAssetCategory)
  * - Kế thừa từ lớp BaseApi
  * - Có cơ chế fallback sang enum nếu API gặp lỗi
- * @createdBy TTVinh (16/11/2025)
+ * @createdBy TTVinh - 16/11/2025
+ * @updatedBy TTVinh - 18/11/2025 - Convert to PascalCase
  */
 
 import { BaseApi } from '@/domains/api/baseApi.js'
@@ -44,9 +45,9 @@ class FixedAssetCategoryApi extends BaseApi {
 
       // Fallback sang enum tĩnh, map về model tương tự
       const fallbackData = getFixedAssetCategoryOptions().map(opt => ({
-        fixed_asset_category_id: opt.value,
-        fixed_asset_category_code: opt.value,
-        fixed_asset_category_name: opt.label
+        FixedAssetCategoryId: opt.value,
+        FixedAssetCategoryCode: opt.value,
+        FixedAssetCategoryName: opt.label
       }))
 
       return FixedAssetCategory.fromApiArray(fallbackData)

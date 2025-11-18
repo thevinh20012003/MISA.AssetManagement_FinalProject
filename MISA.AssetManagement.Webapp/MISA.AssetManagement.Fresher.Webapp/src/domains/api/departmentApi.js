@@ -4,6 +4,7 @@
  * - Kế thừa từ lớp BaseApi
  * - Có fallback sang enum nếu API lỗi
  * @createdBy TTVinh (16/11/2025)
+ * @updatedBy TTVinh (18/11/2025) - Convert to PascalCase
  */
 
 import { BaseApi } from '@/domains/api/baseApi.js';
@@ -42,9 +43,9 @@ class DepartmentApi extends BaseApi {
 
       // Dữ liệu fallback từ enum nếu API lỗi
       const fallbackData = getDepartmentOptions().map(opt => ({
-        department_id: null,
-        department_code: opt.department_code,
-        department_name: opt.department_name
+        DepartmentId: null,
+        DepartmentCode: opt.DepartmentCode,
+        DepartmentName: opt.DepartmentName
       }));
 
       return Department.fromApiArray(fallbackData);

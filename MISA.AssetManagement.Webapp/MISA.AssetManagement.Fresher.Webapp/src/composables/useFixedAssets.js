@@ -24,7 +24,7 @@ export function useFixedAssets() {
 
   /**
    * Hàm tải danh sách lựa chọn bộ lọc (Loại tài sản, Phòng ban)
-   * CreatedBy: TTVinh (16/11/2025)
+   * UpdatedBy: TTVinh - 18/11/2025 - Convert to PascalCase
    */
   async function loadFilterOptions() {
     try {
@@ -43,7 +43,7 @@ export function useFixedAssets() {
 
   /**
    * Hàm tải danh sách tên tắt - mã cho select (Loại tài sản, Phòng ban)
-   * CreatedBy: TTVinh (16/11/2025)
+   * UpdatedBy: TTVinh - 18/11/2025 - Convert to PascalCase
    */
   async function loadShortNameSelectOptions() {
     try {
@@ -62,7 +62,7 @@ export function useFixedAssets() {
 
   /**
    * Hàm tải danh sách tài sản theo bộ lọc và phân trang
-   * CreatedBy: TTVinh (16/11/2025)
+   * UpdatedBy: TTVinh - 18/11/2025 - Convert to PascalCase
    */
   async function loadFixedAssets() {
     loading.value = true;
@@ -70,11 +70,11 @@ export function useFixedAssets() {
 
     try {
       const filterDto = {
-        keyword: searchQuery.value || null,
-        department_code: filterDepartment.value || null,
-        fixed_asset_category_code: filterCategory.value || null,
-        page_number: currentPage.value,
-        page_size: pageSize.value
+        Keyword: searchQuery.value || null,
+        DepartmentCode: filterDepartment.value || null,
+        FixedAssetCategoryCode: filterCategory.value || null,
+        PageNumber: currentPage.value,
+        PageSize: pageSize.value
       };
 
       const response = await fixedAssetApi.getFixedAssets(filterDto);
@@ -93,19 +93,19 @@ export function useFixedAssets() {
 
   /**
    * Computed: danh sách tài sản đã lọc (có thể mở rộng filter nội bộ)
-   * CreatedBy: TTVinh (16/11/2025)
+   * CreatedBy: TTVinh - 16/11/2025
    */
   const filteredAssets = computed(() => fixedAssets.value);
 
   /**
    * Computed: danh sách tài sản phân trang (hiện tại lấy toàn bộ vì API trả theo trang)
-   * CreatedBy: TTVinh (16/11/2025)
+   * CreatedBy: TTVinh - 16/11/2025
    */
   const paginatedAssets = computed(() => fixedAssets.value);
 
   /**
    * Computed: dữ liệu hiển thị bảng
-   * CreatedBy: TTVinh (16/11/2025)
+   * CreatedBy: TTVinh - 16/11/2025
    */
   const tableData = computed(() => {
     return paginatedAssets.value.map(asset => asset.toTableFormat());
@@ -113,29 +113,29 @@ export function useFixedAssets() {
 
   /**
    * Computed: tổng số trang
-   * CreatedBy: TTVinh (16/11/2025)
+   * CreatedBy: TTVinh - 16/11/2025
    */
   const computedTotalPages = computed(() => totalPages.value);
 
   /**
    * Computed: kiểm tra xem tất cả tài sản trên trang hiện tại có được chọn không
-   * CreatedBy: TTVinh (16/11/2025)
+   * UpdatedBy: TTVinh - 18/11/2025 - Convert to PascalCase
    */
   const isAllSelected = computed(() =>
     paginatedAssets.value.length > 0 &&
     paginatedAssets.value.every(asset =>
-      selectedIds.value.includes(asset?.fixed_asset_id)
+      selectedIds.value.includes(asset?.FixedAssetId)
     )
   );
 
   /**
    * Hàm chọn tất cả tài sản trên trang hiện tại
-   * CreatedBy: TTVinh (16/11/2025)
+   * UpdatedBy: TTVinh - 18/11/2025 - Convert to PascalCase
    */
   function handleSelectAll() {
     if (isAllSelected.value) {
       const currentPageIds = paginatedAssets.value
-        .map(asset => asset?.fixed_asset_id)
+        .map(asset => asset?.FixedAssetId)
         .filter(id => id !== null);
 
       selectedIds.value = selectedIds.value.filter(
@@ -143,7 +143,7 @@ export function useFixedAssets() {
       );
     } else {
       const newIds = paginatedAssets.value
-        .map(asset => asset?.fixed_asset_id)
+        .map(asset => asset?.FixedAssetId)
         .filter(id => id !== null && !selectedIds.value.includes(id));
 
       selectedIds.value = [...selectedIds.value, ...newIds];
@@ -153,7 +153,7 @@ export function useFixedAssets() {
   /**
    * Hàm chọn hoặc bỏ chọn một tài sản
    * @param {string|number} id - ID tài sản
-   * CreatedBy: TTVinh (16/11/2025)
+   * CreatedBy: TTVinh - 16/11/2025
    */
   function handleSelectItem(id) {
     const index = selectedIds.value.indexOf(id);
@@ -167,7 +167,7 @@ export function useFixedAssets() {
   /**
    * Hàm chuyển trang
    * @param {number} page - số trang
-   * CreatedBy: TTVinh (16/11/2025)
+   * CreatedBy: TTVinh - 16/11/2025
    */
   function handlePageChange(page) {
     currentPage.value = page;
@@ -177,7 +177,7 @@ export function useFixedAssets() {
   /**
    * Hàm thay đổi số lượng bản ghi trên mỗi trang
    * @param {number} size - số bản ghi
-   * CreatedBy: TTVinh (16/11/2025)
+   * CreatedBy: TTVinh - 16/11/2025
    */
   function handlePageSizeChange(size) {
     pageSize.value = size;
@@ -187,7 +187,7 @@ export function useFixedAssets() {
 
   /**
    * Hàm thực hiện tìm kiếm tài sản
-   * CreatedBy: TTVinh (16/11/2025)
+   * CreatedBy: TTVinh - 16/11/2025
    */
   function handleSearch() {
     currentPage.value = 1;
@@ -196,7 +196,7 @@ export function useFixedAssets() {
 
   /**
    * Hàm reset tất cả bộ lọc và tìm kiếm
-   * CreatedBy: TTVinh (16/11/2025)
+   * CreatedBy: TTVinh - 16/11/2025
    */
   function resetFilters() {
     filterCategory.value = null;
@@ -208,40 +208,40 @@ export function useFixedAssets() {
 
   /**
    * Computed: tổng số lượng tài sản
-   * CreatedBy: TTVinh (16/11/2025)
+   * UpdatedBy: TTVinh - 18/11/2025 - Convert to PascalCase
    */
   const totalQuantity = computed(() =>
-    filteredAssets.value.reduce((sum, asset) => sum + (asset.quantity || 0), 0)
+    filteredAssets.value.reduce((sum, asset) => sum + (asset.Quantity || 0), 0)
   );
 
   /**
    * Computed: tổng giá trị tài sản
-   * CreatedBy: TTVinh (16/11/2025)
+   * UpdatedBy: TTVinh - 18/11/2025 - Convert to PascalCase
    */
   const totalCost = computed(() =>
-    filteredAssets.value.reduce((sum, asset) => sum + (asset.cost || 0), 0)
+    filteredAssets.value.reduce((sum, asset) => sum + (asset.Cost || 0), 0)
   );
 
   /**
    * Computed: tổng khấu hao lũy kế
-   * CreatedBy: TTVinh (16/11/2025)
+   * UpdatedBy: TTVinh - 18/11/2025 - Convert to PascalCase
    */
   const totalDepreciation = computed(() =>
-    filteredAssets.value.reduce((sum, asset) => sum + (asset.accumulated_depreciation || 0), 0)
+    filteredAssets.value.reduce((sum, asset) => sum + (asset.AccumulatedDepreciation || 0), 0)
   );
 
   /**
    * Computed: tổng giá trị còn lại
-   * CreatedBy: TTVinh (16/11/2025)
+   * UpdatedBy: TTVinh - 18/11/2025 - Convert to PascalCase
    */
   const totalResidual = computed(() =>
-    filteredAssets.value.reduce((sum, asset) => sum + (asset.remaining_value || 0), 0)
+    filteredAssets.value.reduce((sum, asset) => sum + (asset.RemainingValue || 0), 0)
   );
 
   /**
    * Watcher: theo dõi thay đổi bộ lọc (Loại tài sản, Phòng ban)
    * Khi thay đổi sẽ reset trang hiện tại về 1 và load lại danh sách tài sản
-   * CreatedBy: TTVinh (16/11/2025)
+   * CreatedBy: TTVinh - 16/11/2025
    */
   watch([filterCategory, filterDepartment], () => {
     console.log('Filter changed:', {
@@ -256,7 +256,7 @@ export function useFixedAssets() {
    * Lấy chi tiết một tài sản theo ID
    * @param {string|number} id - ID tài sản
    * @returns {Object} chi tiết tài sản
-   * CreatedBy: TTVinh (16/11/2025)
+   * CreatedBy: TTVinh - 16/11/2025
    */
   async function getFixedAssetDetail(id) {
     loading.value = true;
@@ -275,7 +275,7 @@ export function useFixedAssets() {
    * Thêm mới tài sản
    * @param {Object} assetData - dữ liệu tài sản
    * @returns {Object} tài sản mới tạo
-   * CreatedBy: TTVinh (16/11/2025)
+   * CreatedBy: TTVinh - 16/11/2025
    */
   async function createFixedAsset(assetData) {
     loading.value = true;
@@ -297,7 +297,7 @@ export function useFixedAssets() {
    * @param {string|number} id - ID tài sản
    * @param {Object} assetData - dữ liệu cập nhật
    * @returns {Object} tài sản đã cập nhật
-   * CreatedBy: TTVinh (16/11/2025)
+   * CreatedBy: TTVinh - 16/11/2025
    */
   async function updateFixedAsset(id, assetData) {
     loading.value = true;
@@ -317,7 +317,7 @@ export function useFixedAssets() {
   /**
    * Xóa một tài sản
    * @param {string|number} id - ID tài sản
-   * CreatedBy: TTVinh (16/11/2025)
+   * CreatedBy: TTVinh - 16/11/2025
    */
   async function deleteFixedAsset(id) {
     loading.value = true;
@@ -335,7 +335,7 @@ export function useFixedAssets() {
 
   /**
    * Xóa nhiều tài sản đã chọn
-   * CreatedBy: TTVinh (16/11/2025)
+   * CreatedBy: TTVinh - 16/11/2025
    */
   async function deleteSelectedAssets() {
     if (selectedIds.value.length === 0) return;
@@ -357,7 +357,7 @@ export function useFixedAssets() {
    * Nhân bản tài sản
    * @param {string|number} id - ID tài sản cần nhân bản
    * @returns {Object} tài sản mới nhân bản
-   * CreatedBy: TTVinh (16/11/2025)
+   * CreatedBy: TTVinh - 16/11/2025
    */
   async function duplicateFixedAsset(id) {
     loading.value = true;
