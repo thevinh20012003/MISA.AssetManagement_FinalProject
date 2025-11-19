@@ -69,7 +69,14 @@ watch(localValue, (newValue) => {
     border-color: #2563eb;
     box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
   }
+
   .search-input::placeholder {
     font-style: italic;
+  }
+
+  @media (max-width: 1144px) {
+    .search-input {
+      padding-right: 52px;
+    }
   }
 </style>

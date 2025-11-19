@@ -14,3 +14,4 @@ export const fixedAssetColumns = [
   { key: 'RemainingValue', label: 'Giá trị còn lại', type: 'currency', class: 'text-right', width: '140px' },
   { key: 'Actions', label: 'Chức năng', type: 'custom', class: 'text-center', sortable: false, width: '100px' }
 ]
+

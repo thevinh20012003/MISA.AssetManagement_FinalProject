@@ -132,7 +132,7 @@ class FixedAssetApi extends BaseApi {
    * @returns {Promise<Object>} DTO tạo mới (FixedAssetCreateDto) với dữ liệu đã copy
    * CreatedBy: TTVinh - 19/11/2025
    */
-   async getDuplicateData(id) {
+  async getDuplicateData(id) {
     const response = await this.axiosInstance.get(`/${this.resource}/${id}/duplicate-data`);
     return response.data;
   }
