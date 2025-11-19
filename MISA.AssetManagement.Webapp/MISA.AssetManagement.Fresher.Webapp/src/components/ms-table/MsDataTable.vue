@@ -177,7 +177,7 @@
 /**
  * Component: MsTable
  * Mô tả: Component bảng dữ liệu có sorting, chọn dòng, resize cột và phân trang.
- * CreatedBy: TTVinh - 15/11/2025
+ * CreatedBy: HMTuan - 29/10/2025
  */
 
 // #region Import
@@ -238,6 +238,7 @@ const emit = defineEmits([
   'add',
   'edit',
   'delete',
+  'delete-multiple',
   'duplicate',
   'page-change',
   'page-size-change'
@@ -265,7 +266,7 @@ const tableWrapperRef = ref(null)
 /**
  * Sắp xếp dữ liệu theo cột được chọn
  * @returns {Array} danh sách items đã sắp xếp
- * createdBy: TTVinh - 15/11/2025
+ * createdBy: HMTuan - 29/10/2025
  */
 const sortedItems = computed(() => {
   if (!sortField.value) return props.items
@@ -364,8 +365,10 @@ function formatValue(value, type) {
  * Lấy ID của một bản ghi (ưu tiên các field phổ biến)
  */
 function getItemId(item) {
-  return item.CandidateID || item.fixed_asset_id || item.id || item.Id
+  const id = item.CandidateID || item.fixed_asset_id || item.id || item.Id
+  return id
 }
+
 
 /**
  * Kiểm tra một bản ghi có được chọn hay không
@@ -442,13 +445,12 @@ function handleKeyDown(e) {
 
       if (selectedRows.value.length === 0) {
         // Nếu không có gì được chọn, xóa row focus
-        const itemId = getItemId(sortedItems.value[focusedRow.value])
-        emit('delete', [itemId])
+        const item = sortedItems.value[focusedRow.value]
+        emit('delete', item)
       } else {
-        // Xóa tất cả rows đã chọn - GỬI ID, KHÔNG PHẢI ITEM
-        const itemIdsToDelete = selectedRows.value.map(i => getItemId(sortedItems.value[i]))
-        emit('delete', itemIdsToDelete)
-        console.log(itemIdsToDelete)
+        // Xóa tất cả rows đã chọn - GỬI ARRAY ITEMS
+        const itemsToDelete = selectedRows.value.map(i => sortedItems.value[i])
+        emit('delete-multiple', itemsToDelete)
       }
       break
 
@@ -672,6 +674,7 @@ onUnmounted(() => {
 watch(() => props.items, () => {
   setTimeout(() => updateScrollbarWidth(), 50)
 }, { deep: true })
+
 // #endregion
 </script>
 
@@ -926,5 +929,4 @@ td {
     padding: 0 12px;
   }
 }
-
 </style>
