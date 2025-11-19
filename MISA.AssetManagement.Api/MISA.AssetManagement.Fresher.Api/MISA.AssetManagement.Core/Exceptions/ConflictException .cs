@@ -10,7 +10,7 @@ namespace MISA.Core.Exceptions
     /// Exception cho lỗi conflict (trùng dữ liệu)
     /// CreatedBy: TTVinh (14/10/2025)
     /// </summary>
-    public class ConflictException : 14/11/2025
+    public class ConflictException : ValidateException
     {
         /// <summary>
         /// Khởi tạo ngoại lệ xung đột dữ liệu (HTTP 409 Conflict).
