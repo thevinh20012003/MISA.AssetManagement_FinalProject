@@ -1,18 +1,12 @@
+// File: @/views/assets/handlers/assetFormLogic.js
 import { ref, computed, watch, nextTick } from 'vue'
 import { validateAssetForm } from '@/utils/validate/validateAssetForm.js'
 
 /**
  * Logic xử lý form tài sản
- * CreatedBy: TTVinh - 16/11/2025
  */
 export function useAssetFormLogic(props, emit) {
   //#region Helper Functions
-
-  /**
-   * Hàm trả về chuỗi ngày hiện tại theo định dạng yyyy-MM-dd
-   * CreatedBy: TTVinh - 16/11/2025
-   * @return {string} Ngày hiện tại (vd: "2025-11-03")
-   */
   function getTodayString() {
     const today = new Date()
     const year = today.getFullYear()
@@ -21,43 +15,25 @@ export function useAssetFormLogic(props, emit) {
     return `${year}-${month}-${day}`
   }
 
-  /**
-   * Hàm sinh mã tài sản mới dựa trên danh sách mã đã có
-   * CreatedBy: TTVinh - 16/11/2025
-   * @return {string} Mã tài sản mới (vd: "TS00001")
-   */
   function generateAssetCode() {
     if (props.existingAssetCodes.length === 0) return 'TS000001'
-
     const numbers = props.existingAssetCodes
       .map(code => {
         const match = code.match(/\d+$/)
         return match ? parseInt(match[0], 10) : 0
       })
       .filter(n => n > 0)
-
     const maxNumber = Math.max(...numbers, 0)
-
-    // Format với 5 chữ số
     return `TS${String(maxNumber + 1).padStart(6, '0')}`
   }
 
-  /**
-   * Hàm định dạng giá trị tiền tệ theo chuẩn 'vi-VN'
-   * CreatedBy: TTVinh - 16/11/2025
-   * @param {number|string} value - Giá trị cần định dạng
-   * @return {string} Chuỗi tiền tệ đã format
-   */
   function formatCurrency(value) {
     if (value == null || value === '') return ''
     return new Intl.NumberFormat('vi-VN').format(value)
   }
 
   /**
-   * Hàm chuyển đổi chuỗi ngày ISO sang định dạng yyyy-MM-dd
-   * CreatedBy: TTVinh - 16/11/2025
-   * @param {string} dateStr - Chuỗi ngày cần chuẩn hóa
-   * @return {string} Ngày hợp lệ dạng yyyy-MM-dd
+   * Convert ISO datetime string → yyyy-MM-dd format
    */
   function normalizeDateString(dateStr) {
     if (!dateStr) return getTodayString()
@@ -94,34 +70,18 @@ export function useAssetFormLogic(props, emit) {
   //#endregion
 
   //#region Computed
-
-  /**
-   * Computed: Tiêu đề dialog dựa theo chế độ của form (add, duplicate, edit)
-   * CreatedBy: TTVinh - 16/11/2025
-   * @return {string} Tiêu đề của form
-   */
   const dialogTitle = computed(() => {
     if (props.mode === 'add') return 'Thêm tài sản'
     if (props.mode === 'duplicate') return 'Nhân bản tài sản'
     return 'Sửa tài sản'
   })
 
-  /**
-   * Computed: Lấy tên phòng ban dựa trên DepartmentCode được chọn
-   * CreatedBy: TTVinh - 16/11/2025
-   * @return {string} Tên phòng ban tương ứng
-   */
   const departmentName = computed(() => {
     if (!formData.value.DepartmentCode) return ''
     const dept = props.departmentOptions.find(d => d.value === formData.value.DepartmentCode)
     return dept ? dept.fullName : ''
   })
 
-  /**
-   * Computed: Lấy tên loại tài sản dựa trên FixedAssetCategoryCode được chọn
-   * CreatedBy: TTVinh - 16/11/2025
-   * @return {string} Tên loại tài sản tương ứng
-   */
   const categoryName = computed(() => {
     if (!formData.value.FixedAssetCategoryCode) return ''
     const cat = props.categoryOptions.find(c => c.value === formData.value.FixedAssetCategoryCode)
@@ -130,11 +90,7 @@ export function useAssetFormLogic(props, emit) {
   //#endregion
 
   //#region Watchers
-
-  /**
-   * Watcher: Theo dõi props.isOpen để load hoặc reset dữ liệu khi form mở/đóng
-   * CreatedBy: TTVinh - 16/11/2025
-   */
+  // Watch isOpen - load data khi mở form
   watch(() => props.isOpen, async (newVal) => {
     if (newVal) {
       await nextTick()
@@ -150,10 +106,7 @@ export function useAssetFormLogic(props, emit) {
     }
   })
 
-  /**
-   * Watcher: Theo dõi FixedAssetCategoryCode để cập nhật LifeTime và DepreciationRate
-   * CreatedBy: TTVinh - 16/11/2025
-   */
+  // Watch category để set LifeTime + DepreciationRate
   watch(() => formData.value.FixedAssetCategoryCode, (newCode) => {
     if (!newCode) {
       formData.value.LifeTime = 0
@@ -167,10 +120,7 @@ export function useAssetFormLogic(props, emit) {
     }
   })
 
-  /**
-   * Watcher: Theo dõi PurchaseDate để cập nhật ProductionYear và TrackedYear
-   * CreatedBy: TTVinh - 16/11/2025
-   */
+  // Watch PurchaseDate để set ProductionYear + TrackedYear
   watch(() => formData.value.PurchaseDate, (newDate) => {
     if (!newDate) return
     const date = new Date(newDate)
@@ -180,10 +130,7 @@ export function useAssetFormLogic(props, emit) {
     formData.value.TrackedYear = year
   })
 
-  /**
-   * Watcher: Theo dõi Cost và DepreciationRate để tính DepreciationValue
-   * CreatedBy: TTVinh - 16/11/2025
-   */
+  // Watch Cost + DepreciationRate để tính DepreciationValue
   watch([() => formData.value.Cost, () => formData.value.DepreciationRate], ([cost, rate]) => {
     if (cost && rate) {
       formData.value.DepreciationValue = (cost * rate) / 100
@@ -194,11 +141,6 @@ export function useAssetFormLogic(props, emit) {
   //#endregion
 
   //#region Methods
-
-  /**
-   * Hàm reset toàn bộ dữ liệu form về giá trị mặc định
-   * CreatedBy: TTVinh - 16/11/2025
-   */
   function resetForm() {
     const today = getTodayString()
     const currentYear = new Date().getFullYear()
@@ -223,11 +165,6 @@ export function useAssetFormLogic(props, emit) {
     errors.value = {}
   }
 
-  /**
-   * Hàm load dữ liệu ban đầu vào form khi sửa hoặc nhân bản
-   * CreatedBy: TTVinh - 16/11/2025
-   * @param {Object} data - Dữ liệu tài sản ban đầu
-   */
   function loadInitialData(data) {
     if (!data) return
 
@@ -251,17 +188,10 @@ export function useAssetFormLogic(props, emit) {
     formData.value = normalized
   }
 
-  /**
-   * Hàm xử lý khi người dùng nhấn nút lưu form
-   * Thực hiện validate dữ liệu và emit sự kiện submit
-   * CreatedBy: TTVinh - 16/11/2025
-   */
   function handleSubmit() {
-    const shouldCheckDuplicate = props.mode === 'add' || props.mode === 'duplicate'
-
     const { errors: validationErrors, isValid } = validateAssetForm(
       formData.value,
-      shouldCheckDuplicate ? props.existingAssetCodes : []
+      props.existingAssetCodes
     )
 
     if (!isValid) {
@@ -284,19 +214,10 @@ export function useAssetFormLogic(props, emit) {
     emit('submit', submitData)
   }
 
-  /**
-   * Hàm thông báo khi form có sự thay đổi dữ liệu (placeholder)
-   * CreatedBy: TTVinh - 16/11/2025
-   */
   function notifyFormChange() {
     // Local state update - placeholder
   }
 
-  /**
-   * Hàm xử lý khi người dùng hủy hoặc đóng form
-   * Emit sự kiện 'close' và truyền dữ liệu hiện tại của form
-   * CreatedBy: TTVinh - 16/11/2025
-   */
   function handleCancel() {
     emit('close', JSON.parse(JSON.stringify(formData.value)))
   }
